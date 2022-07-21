@@ -27,9 +27,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	void MoveForward(float axisValue);
-	void MoveSide(float axisValue);
-	void LookUpDown(float axisValue);
-	void LookSide(float axisValue);
-	void PlayerJump();
+	void MoveForward(float AxisValue);
+	void MoveSide(float AxisValue);
+	void LookUpDown(float AxisValue);
+	void LookSide(float AxisValue);
+	void LookUpDownWithDelta(float AxisValue);
+	void LookSideWithDelta(float AxisValue);
+
+	UPROPERTY(EditAnywhere)
+	float RotationRate = 50; //used to help multiply rotation time for gamepad input
 };

@@ -29,35 +29,45 @@ void APlayerCharacter::Tick(float DeltaTime)
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// resharper tip - if the TEXT bindings say they aren't found you have to go into Unreal >> Tools >> Refresh Visual Studio Project
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveSide"), this, &APlayerCharacter::MoveSide);
 	PlayerInputComponent->BindAxis(TEXT("LookUpDown"), this, &APlayerCharacter::LookUpDown);
 	PlayerInputComponent->BindAxis(TEXT("LookSide"), this, &APlayerCharacter::LookSide);
+	PlayerInputComponent->BindAxis(TEXT("LookUpDownWithDelta"), this, &APlayerCharacter::LookUpDownWithDelta);
+	PlayerInputComponent->BindAxis(TEXT("LookSideWithDelta"), this, &APlayerCharacter::LookSideWithDelta);
 
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::PlayerJump);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 }
 
-void APlayerCharacter::MoveForward(float axisValue)
+void APlayerCharacter::MoveForward(float AxisValue)
 {
-	AddMovementInput(GetActorForwardVector() * axisValue);
+	AddMovementInput(GetActorForwardVector() * AxisValue);
 }
 
-void APlayerCharacter::MoveSide(float axisValue)
+void APlayerCharacter::MoveSide(float AxisValue)
 {
-	AddMovementInput(GetActorRightVector() * axisValue);
+	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
-void APlayerCharacter::LookUpDown(float axisValue)
+void APlayerCharacter::LookUpDown(float AxisValue)
 {
-	AddControllerPitchInput(axisValue);
+	AddControllerPitchInput(AxisValue);
 }
 
-void APlayerCharacter::LookSide(float axisValue)
+void APlayerCharacter::LookSide(float AxisValue)
 {
-	AddControllerYawInput(axisValue);
+	AddControllerYawInput(AxisValue);
 }
 
-void APlayerCharacter::PlayerJump()
+void APlayerCharacter::LookUpDownWithDelta(float AxisValue)
 {
-	Jump();
+	// the with Delta functions add delta time - which lets the gamepad get off of frame rate dependence.
+	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+void APlayerCharacter::LookSideWithDelta(float AxisValue)
+{
+	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
