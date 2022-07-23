@@ -33,4 +33,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* MuzzleFlash;
+
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 10000;
+
+	void FireBullet() const;
 };

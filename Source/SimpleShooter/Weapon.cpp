@@ -36,5 +36,30 @@ void AWeapon::Tick(float DeltaTime)
 void AWeapon::PullTrigger()
 {
 	// ignore the resharper warning - you cannot make this a const function - the input mapping function will fail
+	//spawn our muzzle flash
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+	FireBullet();
+}
+
+void AWeapon::FireBullet() const
+{
+	APawn* owner = Cast<APawn>(GetOwner()); //need this to be a pawn because we need this to get at the controller which pawns have
+	if (owner == nullptr) return;
+	AController* ownerController = owner->GetController();
+	if (ownerController == nullptr) return;
+
+	//get the player's view point via controller function passing in two output parms
+	FVector location;
+	FRotator rotation;
+	ownerController->GetPlayerViewPoint(location, rotation);
+
+	//get the end of the max range from the player view point
+	FVector endPoint = location + rotation.Vector() * MaxRange;
+	FHitResult hit;
+
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(hit, location, endPoint, ECollisionChannel::ECC_GameTraceChannel1);
+	if (bSuccess)
+	{
+		DrawDebugPoint(GetWorld(), hit.Location, 20, FColor::Red, true);
+	}
 }
