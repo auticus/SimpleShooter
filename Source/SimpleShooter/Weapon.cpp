@@ -60,6 +60,8 @@ void AWeapon::FireBullet() const
 	bool bSuccess = GetWorld()->LineTraceSingleByChannel(hit, location, endPoint, ECollisionChannel::ECC_GameTraceChannel1);
 	if (bSuccess)
 	{
-		DrawDebugPoint(GetWorld(), hit.Location, 20, FColor::Red, true);
+		//show the hit striking whatever it is hitting
+		FVector shotOriginatingVector = -rotation.Vector(); // it came from that direction - the opposite of what the player was pointed at
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, hit.Location, shotOriginatingVector.Rotation());
 	}
 }
