@@ -36,4 +36,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50; //used to help multiply rotation time for gamepad input
+
+	UPROPERTY(EditDefaultsOnly) // we don't want this editable at runtime and we don't want to give the impression this should be changed at runtime
+	TSubclassOf<class AWeapon> GunClass;
+
+	UPROPERTY()
+	AWeapon* Weapon;
 };

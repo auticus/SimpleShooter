@@ -2,20 +2,27 @@
 
 
 #include "PlayerCharacter.h"
+#include "Weapon.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//hide the existing weapon baked in to the model
+	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None); //EPhysBodyOp not used anywhere but you have to put a value in
+
+	// Spawn the selected weapon from blueprint into character's hands
+	Weapon = GetWorld()->SpawnActor<AWeapon>(GunClass); //spawn the weapon class that will be set in the blueprint.
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	Weapon->SetOwner(this);
 }
 
 // Called every frame
