@@ -41,7 +41,7 @@ void AWeapon::PullTrigger()
 	FireBullet();
 }
 
-void AWeapon::FireBullet() const
+void AWeapon::FireBullet()
 {
 	APawn* owner = Cast<APawn>(GetOwner()); //need this to be a pawn because we need this to get at the controller which pawns have
 	if (owner == nullptr) return;
@@ -63,5 +63,14 @@ void AWeapon::FireBullet() const
 		//show the hit striking whatever it is hitting
 		FVector shotOriginatingVector = -rotation.Vector(); // it came from that direction - the opposite of what the player was pointed at
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, hit.Location, shotOriginatingVector.Rotation());
+		AActor* target = hit.GetActor();
+
+		AWeapon* weapon = this;
+
+		if (target != nullptr)
+		{
+			FPointDamageEvent damageEvent(Damage, hit, shotOriginatingVector, nullptr); //nullptr is the UDamageType which in this case we dont have a special one
+			target->TakeDamage(Damage, damageEvent, ownerController, this);  
+		}
 	}
 }

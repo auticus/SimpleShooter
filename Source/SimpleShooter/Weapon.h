@@ -40,5 +40,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 10000;
 
-	void FireBullet() const;
+	UPROPERTY(EditAnywhere)
+	float Damage = 10;
+
+	void FireBullet();
 };
