@@ -14,6 +14,7 @@ class SIMPLESHOOTER_API AWeapon : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWeapon();
+	void PullTrigger();
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,4 +30,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	class USkeletalMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* MuzzleFlash;
 };

@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "Components/SkeletalMeshcomponent.h"
 #include "Components/SceneComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -32,3 +33,8 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+void AWeapon::PullTrigger()
+{
+	// ignore the resharper warning - you cannot make this a const function - the input mapping function will fail
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+}

@@ -46,6 +46,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("LookSideWithDelta"), this, &APlayerCharacter::LookSideWithDelta);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &APlayerCharacter::FireWeapon);
 }
 
 void APlayerCharacter::MoveForward(float AxisValue)
@@ -77,4 +78,11 @@ void APlayerCharacter::LookUpDownWithDelta(float AxisValue)
 void APlayerCharacter::LookSideWithDelta(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst -> input bindings will not allow const function in its method signature
+void APlayerCharacter::FireWeapon()
+{
+	if (Weapon == nullptr) return;
+	Weapon->PullTrigger();
 }

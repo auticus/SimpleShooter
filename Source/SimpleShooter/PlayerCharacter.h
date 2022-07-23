@@ -33,6 +33,7 @@ private:
 	void LookSide(float AxisValue);
 	void LookUpDownWithDelta(float AxisValue);
 	void LookSideWithDelta(float AxisValue);
+	void FireWeapon();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50; //used to help multiply rotation time for gamepad input
