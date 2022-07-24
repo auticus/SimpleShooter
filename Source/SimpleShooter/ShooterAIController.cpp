@@ -14,10 +14,7 @@ void AShooterAIController::BeginPlay()
 	if (PlayerPawn == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Player Pawn was not found for AI to focus on!"));
-		return;
 	}
-
-	SetFocus(PlayerPawn);  // priority defaults to Gameplay anyway so use default
 }
 
 void AShooterAIController::Tick(float DeltaTime)
@@ -25,5 +22,18 @@ void AShooterAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Get the AI to set its movement priorities
-	MoveToActor(PlayerPawn, AIMinimumDistanceFromPlayer);
+	// If I can see the player, then I want to set my focus to them and try to move toward them
+	// otherwise (right now) I will stop moving and lose my focus
+
+	if (LineOfSightTo(PlayerPawn))
+	{
+		SetFocus(PlayerPawn);  // priority defaults to Gameplay anyway so use default
+		MoveToActor(PlayerPawn, AIMinimumDistanceFromPlayer);
+	}
+	else
+	{
+		ClearFocus(EAIFocusPriority::Gameplay); //gameplay was the default we set
+		StopMovement();
+	}
+	
 }
