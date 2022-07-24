@@ -25,6 +25,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintPure) // pure blueprint has no exe nodes - states that this won't change state anywhere
+	bool IsDead() const;
 
 private:
 	void MoveForward(float AxisValue);
@@ -43,4 +47,10 @@ private:
 
 	UPROPERTY()
 	AWeapon* Weapon;
+
+	UPROPERTY(EditAnywhere) // used in Begin Play - not editable during run-time
+	float MaxHealth = 100;
+
+	UPROPERTY(VisibleAnywhere)
+	float Health; // the current health of the character
 };

@@ -23,6 +23,8 @@ void APlayerCharacter::BeginPlay()
 	Weapon = GetWorld()->SpawnActor<AWeapon>(GunClass); //spawn the weapon class that will be set in the blueprint.
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	Weapon->SetOwner(this);
+
+	Health = MaxHealth;
 }
 
 // Called every frame
@@ -47,6 +49,23 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &APlayerCharacter::FireWeapon);
+}
+
+float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	// the const& parameter means you cannot change the parameter brought in - this is a readonly parameter
+	float DamageTaken = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	Health -= DamageTaken;
+	if (Health < 0) Health = 0;
+
+	//alternate is to take that DamageTaken and say DamageTaken = FMath::Min(Health, DamageTaken); - I personally do not like how that reads
+	return DamageTaken;
+}
+
+bool APlayerCharacter::IsDead() const
+{
+	return Health <= 0;
 }
 
 void APlayerCharacter::MoveForward(float AxisValue)
