@@ -27,4 +27,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float AIMinimumDistanceFromPlayer = 200;
+
+	UPROPERTY(EditAnywhere)
+	class UBehaviorTree* AIBehavior;
+
+	UPROPERTY(EditAnywhere)
+	class UBlackboardComponent* AIBlackboard;
+
+	void SetupBlackboard();
 };
