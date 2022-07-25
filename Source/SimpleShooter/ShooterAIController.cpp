@@ -36,25 +36,27 @@ void AShooterAIController::Tick(float DeltaTime)
 	// If I can see the player, then I want to set my focus to them and try to move toward them
 	// otherwise (right now) I will stop moving and lose my focus
 
-	/* Commented out for the purposes of seeing how to do this without a behavior tree
-	if (LineOfSightTo(PlayerPawn))
-	{
-		SetFocus(PlayerPawn);  // priority defaults to Gameplay anyway so use default
-		MoveToActor(PlayerPawn, AIMinimumDistanceFromPlayer); //this does set a focus but a lower priority focus
-	}
-	else
-	{
-		ClearFocus(EAIFocusPriority::Gameplay); //gameplay was the default we set
-		StopMovement();
-	}
-	*/
-
-	// the blackboard component has a PlayerLocation vector - we need to set it here
-	// the demo lecture has this going in beginplay but I think we need to set player location in a behavior tree constantly ...
 	UBlackboardComponent* controllerBlackboard = GetBlackboardComponent();
 	if (controllerBlackboard == nullptr) return;
 
-	controllerBlackboard->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+	if (LineOfSightTo(PlayerPawn))
+	{
+		//Commented out code serves as examples for how you could manually set and clear focus and movement
+		//SetFocus(PlayerPawn);  // priority defaults to Gameplay anyway so use default
+		//MoveToActor(PlayerPawn, AIMinimumDistanceFromPlayer); //this does set a focus but a lower priority focus
+		controllerBlackboard->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+		controllerBlackboard->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
+	}
+	else
+	{
+		//ClearFocus(EAIFocusPriority::Gameplay); //gameplay was the default we set
+		//StopMovement();
+		controllerBlackboard->ClearValue(TEXT("PlayerLocation"));
+	}
+	
+
+	// the blackboard component has a PlayerLocation vector - we need to set it here
+	// the demo lecture has this going in beginplay but I think we need to set player location in a behavior tree constantly ...
 }
 
 void AShooterAIController::SetupBlackboard()
@@ -76,7 +78,5 @@ void AShooterAIController::SetupBlackboard()
 	}
 
 	FVector startLocation = aiPawn->GetActorLocation();
-	FVector endLocation = PlayerPawn->GetActorLocation();
-	AIBlackboard->SetValueAsVector(TEXT("PatrolStart"), startLocation);
-	AIBlackboard->SetValueAsVector(TEXT("PatrolEnd"), endLocation);
+	AIBlackboard->SetValueAsVector(TEXT("StartLocation"), startLocation);
 }
