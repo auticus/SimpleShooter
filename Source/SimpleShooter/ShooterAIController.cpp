@@ -77,8 +77,6 @@ void AShooterAIController::SetupBlackboard()
 
 	FVector startLocation = aiPawn->GetActorLocation();
 	FVector endLocation = PlayerPawn->GetActorLocation();
-	UE_LOG(LogTemp, Warning, TEXT("Start Location = %s"), *startLocation.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("End Locatio = %s"), *endLocation.ToString());
 	AIBlackboard->SetValueAsVector(TEXT("PatrolStart"), startLocation);
 	AIBlackboard->SetValueAsVector(TEXT("PatrolEnd"), endLocation);
 }
