@@ -3,6 +3,7 @@
 
 #include "PlayerCharacter.h"
 #include "Weapon.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -58,6 +59,12 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 	Health -= DamageTaken;
 	if (Health < 0) Health = 0;
+
+	if (IsDead())
+	{
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 
 	//alternate is to take that DamageTaken and say DamageTaken = FMath::Min(Health, DamageTaken); - I personally do not like how that reads
 	return DamageTaken;
