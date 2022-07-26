@@ -57,7 +57,13 @@ void AWeapon::FireBullet()
 	FVector endPoint = location + rotation.Vector() * MaxRange;
 	FHitResult hit;
 
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(hit, location, endPoint, ECollisionChannel::ECC_GameTraceChannel1);
+	// we want to make sure in addition to ignoring the ECC_GameTraceChannel1 (which was set up as a custom channel in the editor) that we also don't hit ourselves or
+	// our weapon.
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this); //don't hit the weapon
+	params.AddIgnoredActor(GetOwner()); //also don't hit ourselves in the face
+
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(hit, location, endPoint, ECollisionChannel::ECC_GameTraceChannel1, params);
 	if (bSuccess)
 	{
 		//show the hit striking whatever it is hitting
