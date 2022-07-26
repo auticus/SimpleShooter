@@ -26,6 +26,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	void FireWeapon();
 
 	UFUNCTION(BlueprintPure) // pure blueprint has no exe nodes - states that this won't change state anywhere
 	bool IsDead() const;
@@ -37,7 +38,6 @@ private:
 	void LookSide(float AxisValue);
 	void LookUpDownWithDelta(float AxisValue);
 	void LookSideWithDelta(float AxisValue);
-	void FireWeapon();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50; //used to help multiply rotation time for gamepad input

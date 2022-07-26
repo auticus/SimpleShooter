@@ -39,19 +39,16 @@ void AShooterAIController::Tick(float DeltaTime)
 	UBlackboardComponent* controllerBlackboard = GetBlackboardComponent();
 	if (controllerBlackboard == nullptr) return;
 
+	//Commented out code serves as examples for how you could manually set and clear focus and movement
 	if (LineOfSightTo(PlayerPawn))
 	{
-		//Commented out code serves as examples for how you could manually set and clear focus and movement
 		//SetFocus(PlayerPawn);  // priority defaults to Gameplay anyway so use default
 		//MoveToActor(PlayerPawn, AIMinimumDistanceFromPlayer); //this does set a focus but a lower priority focus
-		controllerBlackboard->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-		controllerBlackboard->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
 	}
 	else
 	{
 		//ClearFocus(EAIFocusPriority::Gameplay); //gameplay was the default we set
 		//StopMovement();
-		controllerBlackboard->ClearValue(TEXT("PlayerLocation"));
 	}
 	
 
