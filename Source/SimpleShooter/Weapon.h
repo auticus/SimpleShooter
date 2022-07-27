@@ -44,4 +44,6 @@ private:
 	float Damage = 10;
 
 	void FireBullet();
+	bool DidShotHitAnything(FHitResult& Hit, FVector& ShotDirection, AController* owningController);
+	AController* GetOwningController() const;
 };
