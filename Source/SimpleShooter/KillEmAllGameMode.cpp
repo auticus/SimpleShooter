@@ -3,6 +3,7 @@
 
 #include "KillEmAllGameMode.h"
 #include "EngineUtils.h"
+#include "ShooterAIController.h"
 
 void AKillEmAllGameMode::PawnKilled(APawn* Pawn)
 {
@@ -13,11 +14,20 @@ void AKillEmAllGameMode::PawnKilled(APawn* Pawn)
 	// AI player when it dies, this comes back null (when logging out this showed to be the case, so its AI Controller is not being returned)
 	// AAIController comes off of AController as does APlayerController - but only a player will have APlayerController
 	APlayerController* playerController = Cast<APlayerController>(Pawn->GetController());
-	if (playerController == nullptr) return;
+	if (playerController == nullptr)
+	{
+		// this was an AI controller, determine if all of them are dead.  If yes then end the game and player has won
+		for (AShooterAIController* controller : TActorRange<AShooterAIController>(GetWorld()))
+		{
+			if (!controller->IsDead()) return;
+		}
 
-	EndGame(false);
-	// null ptr is for where focus should go to now that the player has died, in this case no one
-	// bIsWinner says that this player death definitely didn't trigger a win condition
+		EndGame(true);
+	}
+	else
+	{
+		EndGame(false);
+	}
 }
 
 void AKillEmAllGameMode::EndGame(bool bIsPlayerWinner)

@@ -3,6 +3,7 @@
 
 #include "ShooterAIController.h"
 
+#include "PlayerCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -54,6 +55,13 @@ void AShooterAIController::Tick(float DeltaTime)
 
 	// the blackboard component has a PlayerLocation vector - we need to set it here
 	// the demo lecture has this going in beginplay but I think we need to set player location in a behavior tree constantly ...
+}
+
+bool AShooterAIController::IsDead() const
+{
+	APlayerCharacter* controlledCharacter = Cast<APlayerCharacter>(GetPawn());
+	if (controlledCharacter == nullptr) return true; //if the pawn detached from the controller its as good as dead to us
+	return controlledCharacter->IsDead();
 }
 
 void AShooterAIController::SetupBlackboard()
