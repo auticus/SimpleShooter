@@ -43,6 +43,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* WeaponFiringSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* WeaponImpactSound;
+
 	void FireBullet();
 	bool DidShotHitAnything(FHitResult& Hit, FVector& ShotDirection, AController* owningController);
 	AController* GetOwningController() const;

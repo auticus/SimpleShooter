@@ -38,6 +38,7 @@ void AWeapon::PullTrigger()
 	// ignore the resharper warning - you cannot make this a const function - the input mapping function will fail
 	//spawn our muzzle flash
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+	UGameplayStatics::SpawnSoundAttached(WeaponFiringSound, Mesh, TEXT("MuzzleFlashSocket"));
 	FireBullet();
 }
 
@@ -51,6 +52,8 @@ void AWeapon::FireBullet()
 	{
 		//show the hit striking whatever it is hitting
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, hit.Location, shotDirection.Rotation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponImpactSound, hit.Location, shotDirection.Rotation());
+		//NOTE: PlaySoundAtLocation vs SpawnSoundAtLocation - PlaySound is fire and forget
 		AActor* target = hit.GetActor();
 
 		AWeapon* weapon = this;
