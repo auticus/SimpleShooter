@@ -19,6 +19,9 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> LoseScreenClass; // note that TSubclass forces a base class where UClass can be any class
+
+	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
 
 	FTimerHandle RestartTimer;

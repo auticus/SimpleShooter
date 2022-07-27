@@ -3,6 +3,7 @@
 
 #include "PlayerCharacterController.h"
 #include "TimerManager.h"
+#include "Blueprint/UserWidget.h"
 
 void APlayerCharacterController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
@@ -13,6 +14,13 @@ void APlayerCharacterController::GameHasEnded(class AActor* EndGameFocus, bool b
 	//warning - if you restart your level and you are not playing in STANDALONE GAME mode you will get
 	//TravelFailure: ClientTravelFailure, Reason for Failure 'Failed to Load Package ' something something UEDPIE_0_SandBox - Shutting down PIE
 	//PIE means Play in Editor
+	UUserWidget* LoseScreen = CreateWidget(this, LoseScreenClass);
+	if (LoseScreen != nullptr)
+	{
+		//display the you lose screen
+		//this will require "UMG" to be added to the Build.cs class - otherwise you will get bizarre compile errors
+		LoseScreen->AddToViewport();
+	}
 
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 }
