@@ -2,6 +2,7 @@
 
 
 #include "KillEmAllGameMode.h"
+#include "EngineUtils.h"
 
 void AKillEmAllGameMode::PawnKilled(APawn* Pawn)
 {
@@ -9,10 +10,25 @@ void AKillEmAllGameMode::PawnKilled(APawn* Pawn)
 	UE_LOG(LogTemp, Warning, TEXT("A Pawn called %s has been killed"), *Pawn->GetName());
 
 	// now get the controller for that pawn and fire off its GameHasEnded method.  If its the Player, we have a special player controller that will end the game
+	// AI player when it dies, this comes back null (when logging out this showed to be the case, so its AI Controller is not being returned)
+	// AAIController comes off of AController as does APlayerController - but only a player will have APlayerController
 	APlayerController* playerController = Cast<APlayerController>(Pawn->GetController());
 	if (playerController == nullptr) return;
 
-	playerController->GameHasEnded(nullptr, false);
+	EndGame(false);
 	// null ptr is for where focus should go to now that the player has died, in this case no one
 	// bIsWinner says that this player death definitely didn't trigger a win condition
+}
+
+void AKillEmAllGameMode::EndGame(bool bIsPlayerWinner)
+{
+	// let everyone in the game know that the game is over and if they won or not
+	for(AController* Controller : TActorRange<AController>(GetWorld()))
+	{
+		//remember that player controllers and AI controllers are both AControllers
+		bool controllerOwnerHasWon = Controller->IsPlayerController() == bIsPlayerWinner;
+
+		// set the focus to the dead pawn instead of nullptr.  In multiplayer games maybe you want to set focus to the player that pwned you.
+		Controller->GameHasEnded(Controller->GetPawn(), controllerOwnerHasWon);
+	}
 }
