@@ -2,6 +2,8 @@
 
 
 #include "PlayerCharacter.h"
+
+#include "SimpleShooterGameModeBase.h"
 #include "Weapon.h"
 #include "Components/CapsuleComponent.h"
 
@@ -62,6 +64,13 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 	if (IsDead())
 	{
+		// get the game mode and let it know this was killed
+		ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>();
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
+
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}

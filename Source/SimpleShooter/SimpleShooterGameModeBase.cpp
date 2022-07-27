@@ -3,3 +3,7 @@
 
 #include "SimpleShooterGameModeBase.h"
 
+void ASimpleShooterGameModeBase::PawnKilled(APawn* PawnKilled)
+{
+	// this implementation does nothing
+}

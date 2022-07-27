@@ -18,6 +18,9 @@ void UBTService_PlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	// this should be called on the BT under a node that has determined it can see the player
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0); //index 0 is the player in this game
 
-	//GetSelectedBlackboardKey() is important because in the BT this will be set as the key that this service will be affecting.
-	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
+	if (PlayerPawn != nullptr)
+	{
+		//GetSelectedBlackboardKey() is important because in the BT this will be set as the key that this service will be affecting.
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
+	}
 }
