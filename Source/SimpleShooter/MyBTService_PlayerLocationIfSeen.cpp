@@ -9,7 +9,7 @@
 
 UMyBTService_PlayerLocationIfSeen::UMyBTService_PlayerLocationIfSeen()
 {
-	NodeName = "Set Current Player Location If Seen";
+	NodeName = "Set Current Player If Seen";
 }
 
 void UMyBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -22,7 +22,7 @@ void UMyBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerCo
 
 	if (OwnerComp.GetAIOwner()->LineOfSightTo(playerPawn))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), playerPawn->GetActorLocation());
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(), playerPawn);
 	}
 	else
 	{
