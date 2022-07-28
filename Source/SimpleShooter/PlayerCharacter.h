@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintPure) // pure blueprint has no exe nodes - states that this won't change state anywhere
 	bool IsDead() const;
 
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercent() const;
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveSide(float AxisValue);
