@@ -5,10 +5,25 @@
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
 
+void APlayerCharacterController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Hud = CreateWidget(this, HudClass);
+	if (Hud != nullptr)
+	{
+		Hud->AddToViewport();
+	}
+}
+
 void APlayerCharacterController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
-	UE_LOG(LogTemp, Warning, TEXT("Player has died!!"));
+
+	if (Hud != nullptr)
+	{
+		Hud->RemoveFromViewport();
+	}
 
 	UUserWidget* displayScreen;
 
